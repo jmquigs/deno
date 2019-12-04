@@ -219,6 +219,9 @@ impl ThreadSafeState {
     include_deno_namespace: bool,
     internal_channels: WorkerChannels,
   ) -> Result<Self, ErrBox> {
+    //println!("X import_map: {:?}", global_state.flags.import_map_path);
+    //println!("X main module: {:?}", main_module);
+
     let import_map: Option<ImportMap> =
       match global_state.flags.import_map_path.as_ref() {
         None => None,

@@ -335,6 +335,11 @@ impl Isolate {
     zero_copy_buf: deno_pinned_buf,
   ) {
     let isolate = unsafe { Isolate::from_raw_ptr(user_data) };
+    println!(
+      "X pre dispatch: op: {}/{:?}",
+      op_id,
+      isolate.op_registry.get_name(&op_id)
+    );
 
     let maybe_op = isolate.op_registry.call(
       op_id,

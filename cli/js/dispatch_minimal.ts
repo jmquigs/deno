@@ -88,6 +88,7 @@ export async function sendAsyncMinimal(
   arg: number,
   zeroCopy: Uint8Array
 ): Promise<number> {
+  core.print("X[sendAsyncMinimal Op:" + opId + " Arg:" + arg + "]")
   const promiseId = nextPromiseId(); // AKA cmdId
   scratch32[0] = promiseId;
   scratch32[1] = arg;
@@ -112,6 +113,7 @@ export function sendSyncMinimal(
   arg: number,
   zeroCopy: Uint8Array
 ): number {
+  core.print("X[sendSyncMinimal Op:" + opId + " Arg:" + arg + "]")
   scratch32[0] = 0; // promiseId 0 indicates sync
   scratch32[1] = arg;
   const res = core.dispatch(opId, scratchBytes, zeroCopy)!;

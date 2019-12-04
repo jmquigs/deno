@@ -34,6 +34,7 @@ type OpDispatcher =
 pub struct OpRegistry {
   dispatchers: RwLock<Vec<Arc<Box<OpDispatcher>>>>,
   name_to_id: RwLock<HashMap<String, OpId>>,
+  id_to_name: RwLock<HashMap<OpId, String>>,
 }
 
 impl OpRegistry {
@@ -47,12 +48,23 @@ impl OpRegistry {
     registry
   }
 
+  pub fn get_name(&self, o: &OpId) -> Option<String> {
+    let lock = self.id_to_name.read().unwrap();
+    let res = lock.get(o);
+
+    match res {
+      Some(s) => Some(s.to_owned()),
+      None => None,
+    }
+  }
+
   pub fn register<F>(&self, name: &str, op: F) -> OpId
   where
     F: Fn(&[u8], Option<PinnedBuf>) -> CoreOp + Send + Sync + 'static,
   {
     let mut lock = self.dispatchers.write().unwrap();
     let op_id = lock.len() as u32;
+    println!("X register op: {} id {}", name, op_id);
 
     let mut name_lock = self.name_to_id.write().unwrap();
     let existing = name_lock.insert(name.to_string(), op_id);
@@ -60,6 +72,15 @@ impl OpRegistry {
       existing.is_none(),
       format!("Op already registered: {}", name)
     );
+
+    {
+      let mut name_lock = self.id_to_name.write().unwrap();
+      let existing = name_lock.insert(op_id, name.to_string());
+      assert!(
+        existing.is_none(),
+        format!("Op already registered: {}", name)
+      );
+    }
 
     lock.push(Arc::new(Box::new(op)));
     drop(name_lock);

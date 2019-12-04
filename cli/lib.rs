@@ -430,6 +430,8 @@ pub fn main() {
   };
   log::set_max_level(log_level.to_level_filter());
 
+  println!("X subcommand {:?}", subcommand);
+
   match subcommand {
     DenoSubcommand::Bundle => bundle_command(flags, argv),
     DenoSubcommand::Completions => {}
