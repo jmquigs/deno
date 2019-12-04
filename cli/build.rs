@@ -16,6 +16,8 @@ fn main() {
 
   let root_names = vec![c.join("js/main.ts")];
   let bundle = o.join("CLI_SNAPSHOT.js");
+  println!("X building bundle from {:?}", root_names);
+  println!("X snapshot bundle: {:?}", bundle);
   let state = deno_typescript::compile_bundle(&bundle, root_names).unwrap();
   assert!(bundle.exists());
   deno_typescript::mksnapshot_bundle(&bundle, state).unwrap();

@@ -8,6 +8,7 @@ use deno::StartupData;
 
 #[cfg(feature = "no-snapshot-init")]
 pub fn deno_isolate_init() -> StartupData<'static> {
+  println!("X Deno isolate init WITHOUT snapshots.");
   debug!("Deno isolate init without snapshots.");
   #[cfg(not(feature = "check-only"))]
   let source =
@@ -23,11 +24,18 @@ pub fn deno_isolate_init() -> StartupData<'static> {
 
 #[cfg(not(feature = "no-snapshot-init"))]
 pub fn deno_isolate_init() -> StartupData<'static> {
+  println!("X Deno isolate init with snapshots.");
   debug!("Deno isolate init with snapshots.");
   #[cfg(not(feature = "check-only"))]
   let data = CLI_SNAPSHOT;
   #[cfg(feature = "check-only")]
   let data = b"";
+
+  println!(
+    "X snap length: {}; included at compile time from {}",
+    data.len(),
+    concat!(env!("OUT_DIR"), "/CLI_SNAPSHOT.bin")
+  );
 
   StartupData::Snapshot(data)
 }

@@ -58,6 +58,7 @@ export function sendSync(
   args: object = {},
   zeroCopy?: Uint8Array
 ): Ok {
+  //core.print("X[sendSync Op:" + opId + "; Arg:" + JSON.stringify(args) + "; ZC: " + !!zeroCopy + "]");
   const argsUi8 = encode(args);
   const resUi8 = core.dispatch(opId, argsUi8, zeroCopy);
   util.assert(resUi8 != null);
@@ -72,6 +73,7 @@ export async function sendAsync(
   args: object = {},
   zeroCopy?: Uint8Array
 ): Promise<Ok> {
+  // core.print("X[sendAsync Op:" + opId + "; Arg:" + JSON.stringify(args) + "; ZC: " + !!zeroCopy + "]");
   const promiseId = nextPromiseId();
   args = Object.assign(args, { promiseId });
   const promise = util.createResolvable<Ok>();

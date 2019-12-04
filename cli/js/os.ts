@@ -90,6 +90,9 @@ interface Start {
 export function start(preserveDenoNamespace = true, source?: string): Start {
   core.setAsyncHandler(dispatch.asyncMsgFromRust);
   const ops = core.ops();
+  // JMQ: the various dispatch OP_XXX "constants" are set here by inspecting the opts map returned
+  // from Rust
+
   // TODO(bartlomieju): this is a prototype, we should come up with
   // something a bit more sophisticated
   for (const [name, opId] of Object.entries(ops)) {
